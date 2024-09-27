@@ -1,17 +1,17 @@
 ﻿using System;
-using System.Security.Principal;
 
 class Program
 {
-
-    // 화면 만들기 - 메인화면
     static Player player;
+
     static void Main(string[] args)
     {
         DisplayMainUI();
     }
+
     static void DisplayMainUI()
     {
+        player = new Player("StartPlayer");
         Console.Clear();
         Console.WriteLine("스파르타 마을에 오신 여러분 환영합니다.");
         Console.WriteLine("이곳에서 던전으로 들어가기전 활동을 할 수 있습니다.");
@@ -19,28 +19,27 @@ class Program
         Console.WriteLine("1. 상태 보기");
         Console.WriteLine("2. 인벤토리");
         Console.WriteLine("3. 상점");
+        Console.WriteLine("4. 전투 시작");
         Console.WriteLine();
         Console.WriteLine("원하시는 행동을 입력해주세요.");
         Console.Write(">>");
 
-        int result = CheckInput(1, 3);
+        int result = CheckInput(1, 4);
 
         switch (result)
         {
             case 1:
                 DisplayStatUI();
                 break;
-
-            case 2:
-                break;
-
-            case 3:
+            case 4:
+                // Combat 클래스에 전투 종료 후 메인 화면으로 돌아가는 델리게이트 전달
+                Combat combat = new Combat(player, DisplayMainUI);
                 break;
         }
     }
+
     static void DisplayStatUI()
     {
-        player = new Player("StartPlayer");
         Console.Clear();
         Console.WriteLine("상태 보기");
         Console.WriteLine("캐릭터의 정보가 표시됩니다.");
@@ -61,10 +60,11 @@ class Program
         switch (result)
         {
             case 0:
-                DisplayMainUI();
+                DisplayMainUI();  // 나가기 선택 시 메인 화면으로 이동
                 break;
         }
     }
+
     static int CheckInput(int min, int max)
     {
         int result;
