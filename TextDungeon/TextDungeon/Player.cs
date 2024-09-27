@@ -7,7 +7,7 @@ public class Player
     public int Level { get; private set; }
     public int Attack { get; private set; }
     public int Defense { get; private set; }
-    public int Health { get; private set; }
+    public int Health { get; set; }
     public int Gold { get; private set; }
 
     public Player(string name, string job = "전사", int level = 1, int attack = 10, int defense = 5, int health = 100, int gold = 1500)
