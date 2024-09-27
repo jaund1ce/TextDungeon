@@ -2,15 +2,15 @@
 
 public class Player
 {
-    public string Name { get; set; }
-    public string Job { get; set; }
-    public int Level { get; set; } = 1; 
-    public int Attack { get; set; } = 10;
-    public int Defense { get; set; } = 5;
-    public int Health { get; set; } = 100;
-    public int Gold { get; set; } = 1500;
+    public string Name { get; private set; }
+    public string Job { get; private set; }
+    public int Level { get; private set; }
+    public int Attack { get; private set; }
+    public int Defense { get; private set; }
+    public int Health { get; private set; }
+    public int Gold { get; private set; }
 
-    public Player(string name, string job, int level, int attack, int defense, int health, int gold)
+    public Player(string name, string job = "전사", int level = 1, int attack = 10, int defense = 5, int health = 100, int gold = 1500)
     {
         Name = name;
         Job = job;

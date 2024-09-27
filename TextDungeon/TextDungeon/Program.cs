@@ -5,7 +5,7 @@ class Program
 {
 
     // 화면 만들기 - 메인화면
-
+    static Player player;
     static void Main(string[] args)
     {
         DisplayMainUI();
@@ -40,16 +40,17 @@ class Program
     }
     static void DisplayStatUI()
     {
+        player = new Player("StartPlayer");
         Console.Clear();
         Console.WriteLine("상태 보기");
         Console.WriteLine("캐릭터의 정보가 표시됩니다.");
         Console.WriteLine();
-        Console.WriteLine($"Lv. {}");
-        Console.WriteLine($"Chad {}");
-        Console.WriteLine($"공격력 : {}");
-        Console.WriteLine($"방어력 : {}");
-        Console.WriteLine($"체 력 : {}");
-        Console.WriteLine($"Gold : {} G");
+        Console.WriteLine($"Lv. {player.Level}");
+        Console.WriteLine($"Chad {player.Job}");
+        Console.WriteLine($"공격력 : {player.Attack}");
+        Console.WriteLine($"방어력 : {player.Defense}");
+        Console.WriteLine($"체 력 : {player.Health}");
+        Console.WriteLine($"Gold : {player.Gold} G");
         Console.WriteLine();
         Console.WriteLine("0. 나가기");
         Console.WriteLine();
