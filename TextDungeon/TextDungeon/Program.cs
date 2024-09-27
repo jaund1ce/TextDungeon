@@ -6,7 +6,6 @@ class Program
 
     // 화면 만들기 - 메인화면
 
-
     static void Main(string[] args)
     {
         DisplayMainUI();
@@ -29,12 +28,39 @@ class Program
         switch (result)
         {
             case 1:
+                DisplayStatUI();
                 break;
 
             case 2:
                 break;
 
             case 3:
+                break;
+        }
+    }
+    static void DisplayStatUI()
+    {
+        Console.Clear();
+        Console.WriteLine("상태 보기");
+        Console.WriteLine("캐릭터의 정보가 표시됩니다.");
+        Console.WriteLine();
+        Console.WriteLine($"Lv. {}");
+        Console.WriteLine($"Chad {}");
+        Console.WriteLine($"공격력 : {}");
+        Console.WriteLine($"방어력 : {}");
+        Console.WriteLine($"체 력 : {}");
+        Console.WriteLine($"Gold : {} G");
+        Console.WriteLine();
+        Console.WriteLine("0. 나가기");
+        Console.WriteLine();
+        Console.WriteLine("원하시는 행동을 입력해주세요.");
+        Console.Write(">>");
+        int result = CheckInput(0, 0);
+
+        switch (result)
+        {
+            case 0:
+                DisplayMainUI();
                 break;
         }
     }
@@ -53,5 +79,4 @@ class Program
             Console.WriteLine("잘못된 입력입니다!!!!");
         }
     }
-
 }
