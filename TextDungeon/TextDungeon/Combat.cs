@@ -97,31 +97,49 @@ public class Combat
         }
         else
         {
-            // 공격력 계산 (10% 오차)
+            // 공격력 계산 (회피와 치명타 처리 포함)
             Random rand = new Random();
-            int variance = (int)Math.Ceiling(player.Attack * 0.1);
-            int finalAttack = player.Attack + rand.Next(-variance, variance + 1);
-            selectedMonster.HP -= finalAttack;
+            bool isDodge = rand.Next(0, 100) < 10;  // 10% 확률로 회피
+            bool isCritical = rand.Next(0, 100) < 15;  // 15% 확률로 치명타
 
-            string attackLog = $"{selectedMonster.Name}에게 {finalAttack}의 데미지를 입혔습니다!";
-            AddCombatLog(attackLog);  // 로그를 추가할 때 AddCombatLog 사용
-
-            // 몬스터가 죽었을 경우 로그 추가
-            if (selectedMonster.HP <= 0)
+            if (isDodge)
             {
-                string deathLog = $"{selectedMonster.Name}이(가) 죽었습니다.";
-                AddCombatLog(deathLog);  // 죽음 로그를 추가
+                // 회피 성공
+                string dodgeLog = $"{selectedMonster.Name}이(가) 공격을 회피했습니다!";
+                AddCombatLog(dodgeLog);  // 회피 로그 추가
+                Console.WriteLine(dodgeLog);
+            }
+            else
+            {
+                // 치명타 적용 여부에 따른 공격력 계산
+                int variance = (int)Math.Ceiling(player.Attack * 0.1);
+                int baseAttack = player.Attack + rand.Next(-variance, variance + 1);
+                int finalAttack = isCritical ? (int)Math.Ceiling(baseAttack * 1.6) : baseAttack;
 
-                // 전투 종료 직전 모든 몬스터가 죽었는지 확인
-                if (monsters.TrueForAll(m => m.IsDead))
+                string attackType = isCritical ? "치명타" : "공격";
+                selectedMonster.HP -= finalAttack;
+
+                string attackLog = $"{selectedMonster.Name}에게 {attackType}로 {finalAttack}의 데미지를 입혔습니다!";
+                AddCombatLog(attackLog);  // 공격 로그 추가
+                Console.WriteLine(attackLog);
+
+                // 몬스터가 죽었을 경우 로그 추가
+                if (selectedMonster.HP <= 0)
                 {
-                    Console.Clear();
-                    AddCombatLog("모든 몬스터를 처치했습니다! 승리!");  // 승리 로그 추가
+                    string deathLog = $"{selectedMonster.Name}이(가) 죽었습니다.";
+                    AddCombatLog(deathLog);  // 죽음 로그 추가
 
-                    // 최종 로그와 함께 전투 종료
-                    DisplayCombatLog();
-                    EndBattle();
-                    return;
+                    // 전투 종료 직전 모든 몬스터가 죽었는지 확인
+                    if (monsters.TrueForAll(m => m.IsDead))
+                    {
+                        Console.Clear();
+                        AddCombatLog("모든 몬스터를 처치했습니다! 승리!");  // 승리 로그 추가
+
+                        // 최종 로그와 함께 전투 종료
+                        DisplayCombatLog();
+                        EndBattle();
+                        return;
+                    }
                 }
             }
 
@@ -144,10 +162,22 @@ public class Combat
         {
             if (!monster.IsDead)
             {
-                player.Health -= monster.Attack;
-                string monsterAttackLog = $"{monster.Name}이(가) {monster.Attack}의 데미지를 입혔습니다! 플레이어의 남은 체력: {player.Health}";
-                Console.WriteLine(monsterAttackLog);
-                combatLog.Add(monsterAttackLog);  // 로그에 추가
+                Random rand = new Random();
+                bool isDodge = rand.Next(0, 100) < 10;  // 플레이어도 10% 확률로 회피
+
+                if (isDodge)
+                {
+                    string dodgeLog = $"플레이어가 {monster.Name}의 공격을 회피했습니다!";
+                    AddCombatLog(dodgeLog);  // 회피 로그 추가
+                    Console.WriteLine(dodgeLog);
+                }
+                else
+                {
+                    player.Health -= monster.Attack;
+                    string monsterAttackLog = $"{monster.Name}이(가) {monster.Attack}의 데미지를 입혔습니다! 플레이어의 남은 체력: {player.Health}";
+                    AddCombatLog(monsterAttackLog);  // 로그에 추가
+                    Console.WriteLine(monsterAttackLog);
+                }
             }
         }
 
