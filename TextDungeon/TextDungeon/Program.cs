@@ -31,6 +31,9 @@ class Program
             case 1:
                 DisplayStatUI();
                 break;
+            case 2:
+                Inventory();
+                break;
             case 4:
                 // Combat 클래스에 전투 종료 후 메인 화면으로 돌아가는 델리게이트 전달
                 Combat combat = new Combat(player, DisplayMainUI);
@@ -61,6 +64,31 @@ class Program
         {
             case 0:
                 DisplayMainUI();  // 나가기 선택 시 메인 화면으로 이동
+                break;
+        }
+    }
+    static void Inventory()
+    {
+        Console.Clear();
+        Console.WriteLine("인벤토리");
+        Console.WriteLine("보유 중인 아이템을 관리합니다.");
+        Console.WriteLine();
+        Console.WriteLine("[ 아이템 목록 ]");
+        Console.WriteLine();
+        Console.WriteLine("1.장착관리");
+        Console.WriteLine("0. 나가기");
+        Console.WriteLine();
+        Console.WriteLine("원하시는 행동을 입력해주세요.");
+        Console.Write(">>");
+        
+        int result = CheckInput(0, 1);
+
+        switch (result)
+        {
+            case 0:
+                DisplayMainUI();  // 나가기 선택 시 메인 화면으로 이동
+                break;
+            case 1:
                 break;
         }
     }
