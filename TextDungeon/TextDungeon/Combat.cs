@@ -193,6 +193,7 @@ public class Combat
 
     private void EndBattle()
     {
+        player.MonsterKills += monsters.Count; // 처치한 몬스터 수 증가
         Console.WriteLine("전투가 끝났습니다. 계속하려면 아무 키나 누르세요...");
         Console.ReadKey();  // 사용자의 키 입력을 기다림
         returnToStatUI();  // StatUI로 돌아감
