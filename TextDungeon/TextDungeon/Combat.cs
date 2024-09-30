@@ -185,6 +185,7 @@ public class Combat
                 Console.WriteLine("잘못된 입력입니다.");
                 Console.WriteLine("계속하려면 아무 키나 누르세요...");
                 Console.ReadKey();  // 사용자 입력 대기
+                PlayerAttackPhase();
             }
         }
     }
