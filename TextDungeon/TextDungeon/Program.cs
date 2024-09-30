@@ -6,14 +6,48 @@ class Program
 
     static void Main(string[] args)
     {
-        DisplayMainUI();
+        StartUI();
+    }
+
+    static void StartUI()
+    {
+        Console.Clear();
+        Console.WriteLine("원하시는 이름을 입력해주세요.");
+        Console.Write(">>");
+        string playerName = Console.ReadLine();
+        Console.WriteLine("직업을 선택하세요");
+        Console.WriteLine();
+        Console.WriteLine("1. 전사");
+        Console.WriteLine("2. 도적");
+        Console.WriteLine("3. 궁수");
+        Console.WriteLine();
+        Console.WriteLine("원하시는 직업을 선택해주세요.");
+        Console.Write(">> ");
+        int result = CheckInput(1, 3);
+        switch (result)
+        {
+            case 1:
+                string playerJob1 = result.ToString("전사");
+                player = new Player(playerName, playerJob1);
+                DisplayStatUI();
+                break;
+            case 2:
+                string playerJob2 = result.ToString("도적");
+                player = new Player(playerName, playerJob2);
+                DisplayStatUI();
+                break;
+            case 3:
+                string playerJob3 = result.ToString("궁수");
+                player = new Player(playerName, playerJob3);
+                DisplayStatUI();
+                break;
+        }
     }
 
     static void DisplayMainUI()
-    {
-        player = new Player("StartPlayer");
+    { 
         Console.Clear();
-        Console.WriteLine("스파르타 마을에 오신 여러분 환영합니다.");
+        Console.WriteLine($"{player.Name}님! 스파르타 마을에 오신걸 환영합니다.");
         Console.WriteLine("이곳에서 던전으로 들어가기전 활동을 할 수 있습니다.");
         Console.WriteLine();
         Console.WriteLine("1. 상태 보기");
@@ -47,6 +81,7 @@ class Program
         Console.WriteLine("상태 보기");
         Console.WriteLine("캐릭터의 정보가 표시됩니다.");
         Console.WriteLine();
+        Console.WriteLine($"플레이어 : {player.Name}");
         Console.WriteLine($"Lv. {player.Level}");
         Console.WriteLine($"Chad {player.Job}");
         Console.WriteLine($"공격력 : {player.Attack}");
