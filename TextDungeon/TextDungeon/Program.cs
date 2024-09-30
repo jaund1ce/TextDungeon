@@ -6,14 +6,25 @@ class Program
 
     static void Main(string[] args)
     {
+        StartUI();
+    }
+
+    static void StartUI()
+    {
+        Console.Clear();
+        Console.WriteLine("스파르타 마을에 오신 여러분 환영합니다.");
+        Console.WriteLine();
+        Console.WriteLine("원하시는 행동을 입력해주세요.");
+        Console.Write(">>");
+        string playerName = Console.ReadLine();
+        player = new Player(playerName);
         DisplayMainUI();
     }
 
     static void DisplayMainUI()
-    {
-        player = new Player("StartPlayer");
+    { 
         Console.Clear();
-        Console.WriteLine("스파르타 마을에 오신 여러분 환영합니다.");
+        Console.WriteLine($"{player.Name}님! 스파르타 마을에 오신 여러분 환영합니다.");
         Console.WriteLine("이곳에서 던전으로 들어가기전 활동을 할 수 있습니다.");
         Console.WriteLine();
         Console.WriteLine("1. 상태 보기");
@@ -44,6 +55,7 @@ class Program
         Console.WriteLine("상태 보기");
         Console.WriteLine("캐릭터의 정보가 표시됩니다.");
         Console.WriteLine();
+        Console.WriteLine($"플레이어 : {player.Name}");
         Console.WriteLine($"Lv. {player.Level}");
         Console.WriteLine($"Chad {player.Job}");
         Console.WriteLine($"공격력 : {player.Attack}");
