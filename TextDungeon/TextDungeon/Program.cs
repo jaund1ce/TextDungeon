@@ -163,12 +163,14 @@ class Program
             case 0:
                 DisplayMainUI();  // 나가기 선택 시 메인 화면으로 이동
                 break;
-            default:
-                int Itemidx = result - 1;
-                Item targetItem = ItemDb[Itemidx];
-                player.EquipItem(targetItem);
 
+            case 1:
                 EquipUI();
+                break;
+            default:
+                Console.WriteLine("다시 입력해주세요");
+                Console.ReadLine();
+                InventoryUI();
                 break;
         }
     }
@@ -195,11 +197,9 @@ class Program
             case 0:
                 InventoryUI();
                 break;
-
             default:
-
-                int itemIdx = result - 1;
-                Item targetItem = ItemDb[itemIdx];
+                int Itemidx = result - 1;
+                Item targetItem = ItemDb[Itemidx];
                 player.EquipItem(targetItem);
 
                 EquipUI();
