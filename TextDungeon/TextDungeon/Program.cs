@@ -1,14 +1,18 @@
 ﻿using System;
-using TextDungeon;
+namespace TextDungeon; 
+using static Player;
 
-using System;
+
 
 class Program
 {
     static Player player;
     static QuestManager questManager;
+    static Item[] ItemDb;
+
     static void Main(string[] args)
     {
+        SetData();
         StartUI();
         questManager = new QuestManager(player);
 
@@ -54,7 +58,18 @@ class Program
 
         player = new Player(playerName, playerJob);
     }
-
+    static void SetData() //상점물건등록
+    {
+        ItemDb = new Item[]
+        {
+            new Item("수련자의 갑옷", 1, 5,"수련에 도움을 주는 갑옷입니다. ",1000),
+            new Item("무쇠갑옷", 1, 9,"무쇠로 만들어져 튼튼한 갑옷입니다. ",2000),
+            new Item("스파르타의 갑옷", 1, 15,"스파르타의 전사들이 사용했다는 전설의 갑옷입니다. ",3500),
+            new Item("낣은 검", 0, 2,"쉽게 볼 수 있는 낡은 검 입니다. ",600),
+            new Item("청동 도끼", 0, 5,"어디선가 사용됐던거 같은 도끼입니다. ",1500),
+            new Item("스파르타의 창", 0, 7,"스파르타의 전사들이 사용했다는 전설의 창입니다. ",2500)
+        };
+    }
     public static void DisplayMainUI()
     {
         questManager.CheckQuestCompletion(); // 퀘스트 완료 여부 확인
@@ -82,7 +97,10 @@ class Program
                 DisplayMainUI(); // 메인 UI로 돌아가기
                 break;
             case 2:
-                Inventory();
+                InventoryUI();
+                break;
+            case 3:
+                ShopUI();
                 break;
             case 4:
                 // Combat 클래스에 전투 종료 후 메인 화면으로 돌아가는 델리게이트 전달
@@ -121,13 +139,16 @@ class Program
         Console.WriteLine("계속하려면 아무 키나 누르세요...");
         Console.ReadKey();
     }
-    static void Inventory()
+
+    static void InventoryUI()
     {
         Console.Clear();
         Console.WriteLine("인벤토리");
         Console.WriteLine("보유 중인 아이템을 관리합니다.");
-        Console.WriteLine();
         Console.WriteLine("[ 아이템 목록 ]");
+
+        player.DisplayInventory(false);
+
         Console.WriteLine();
         Console.WriteLine("1.장착관리");
         Console.WriteLine("0. 나가기");
@@ -135,19 +156,118 @@ class Program
         Console.WriteLine("원하시는 행동을 입력해주세요.");
         Console.Write(">>");
 
-        int result = CheckInput(0, 1);
+        int result = CheckInput(0, player.InventoryCount);
 
         switch (result)
         {
             case 0:
                 DisplayMainUI();  // 나가기 선택 시 메인 화면으로 이동
                 break;
-            case 1:
+            default:
+                int Itemidx = result - 1;
+                Item targetItem = ItemDb[Itemidx];
+                player.EquipItem(targetItem);
+
+                EquipUI();
                 break;
         }
     }
 
-    public static int CheckInput(int min, int max)
+    static void EquipUI()
+    {
+        Console.Clear();
+        Console.WriteLine("인벤토리 - 장착관리");
+        Console.WriteLine("보유 중인 아이템을 관리할 수 있습니다.");
+        Console.WriteLine();
+        Console.WriteLine("[아이템 목록]");
+
+        player.DisplayInventory(true);
+
+        Console.WriteLine();
+        Console.WriteLine("0. 나가기");
+        Console.WriteLine();
+        Console.WriteLine("원하시는 행동을 입력해주세요.");
+
+        int result = CheckInput(0, player.InventoryCount);
+
+        switch (result)
+        {
+            case 0:
+                InventoryUI();
+                break;
+
+            default:
+
+                int itemIdx = result - 1;
+                Item targetItem = ItemDb[itemIdx];
+                player.EquipItem(targetItem);
+
+                EquipUI();
+                break;
+        }
+    }
+    static void ShopUI()
+    {
+        Console.Clear();
+        Console.WriteLine("상점");
+        Console.WriteLine("필요한 아이템을 얻을 수 있는 상점입니다.");
+        Console.WriteLine();
+        Console.WriteLine("[보유 골드]");
+        Console.WriteLine($"{player.Gold} G");
+        Console.WriteLine();
+        Console.WriteLine("[아이템 목록]");
+        for (int i = 0; i < ItemDb.Length; i++)
+        {
+            Item curItem = ItemDb[i];
+
+            string displayPrice = (player.HasItem(curItem) ? "구매완료" : $"{curItem.itemPrice} G");
+            Console.WriteLine($"- {i+1} . {curItem.ItemInfoText()}  |  {displayPrice}");
+        }
+        
+        Console.WriteLine();
+        Console.WriteLine();
+        Console.WriteLine("구매하고 싶은 장비의 번호를 입력해주세요");
+        Console.WriteLine("0. 나가기");
+        Console.Write(">>");
+
+        int result = CheckInput(0, ItemDb.Length);
+
+        switch (result)
+        {
+            case 0:
+                DisplayMainUI();
+                break;
+
+            default:
+                int itemidx = result - 1;
+                Item targetItem = ItemDb[itemidx];
+                //이미 구매한 아이템이면
+                if (player.HasItem(targetItem))
+                {
+                    Console.WriteLine("이미 구매한 아이템입니다.");
+                    Console.WriteLine("Enter 를 눌러주세요.");
+                    Console.ReadLine();
+                }
+                else //구매가 가능하면
+                {
+                    //소지금이 충족될떄
+                    if (player.Gold >= targetItem.itemPrice)
+                    {
+                        Console.WriteLine("구매완료");
+                        player.BuyItem(targetItem);
+                    }
+                    else
+                    {
+                        Console.WriteLine("골드가 부족합니다");
+                        Console.WriteLine("Enter 를 눌러주세요.");
+                        Console.ReadLine();
+                    }
+                }
+                ShopUI();
+                break;
+        }
+    }
+public static int CheckInput(int min, int max)
     {
         int result;
         while (true)
