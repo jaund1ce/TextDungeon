@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 using System.Xml.Linq;
 namespace TextDungeon
 {
@@ -35,6 +36,14 @@ namespace TextDungeon
                 Console.WriteLine($"- {displayEquipped} {targetItem.ItemInfoText()}");
             }
         }
+
+        public Item getinventoryItem(int idx)
+        {
+            int Itemidx = idx - 1;
+            Item targetItem = Inventory[Itemidx];
+            return targetItem;
+        } 
+
 
 
         public void EquipItem(Item item)
@@ -90,7 +99,7 @@ namespace TextDungeon
             Level = 1;
             MonsterKills = 0;
             IsEquipped = false;
-            Gold = 50;
+            Gold = 50000;
             Health = 100;
 
             // 직업에 따른 스탯 설정
