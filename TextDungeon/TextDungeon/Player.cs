@@ -12,7 +12,10 @@ namespace TextDungeon
         public int Attack { get; private set; }
         public int Defense { get; private set; }
         public int Health { get; set; }
+        public int MaxHealth { get; set; }
         public int Gold { get; set; }  // 골드는 외부에서 증가시키기 위해 set 변경
+        public int Experience { get; set; }
+        private int NeedExp = 50;
         public int MonsterKills { get; set; }  // 처치한 몬스터 수
         public bool IsEquipped { get; set; }
 
@@ -98,6 +101,8 @@ namespace TextDungeon
             IsEquipped = false;
             Gold = 50000;  // 초기 골드 설정
             Health = 100;
+            MaxHealth = 100;
+            Experience = 0;
 
             // 직업에 따른 스탯 설정
             switch (job)
@@ -146,6 +151,27 @@ namespace TextDungeon
         {
             Inventory.Add(item);
             Console.WriteLine($"{item.itemName}이(가) 인벤토리에 추가되었습니다.");
+        }
+
+        // 경험치 획득 및 레벨업 메서드
+        public void GainExperience(int amount)
+        {
+            Experience += amount;
+            while (Experience >= NeedExp)
+            {
+                Experience -= NeedExp;
+                Level++;
+                Attack += 1; // 레벨이 오를 때마다 공격력 1증가
+                Defense += 1; // 레벨이 오를 때마다 방어력 1증가
+                Health = MaxHealth; // 레벨이 오르면 최대체력까지 회복
+                Console.WriteLine("********************************");
+                Console.WriteLine("축하합니다! 레벨이 올랐습니다!");
+                Console.WriteLine("********************************");
+                NeedExp += 20; // 레벨이 오를 때마다 필요한 경험치 증가
+
+            }
+            Console.WriteLine($"현재 레벨 : {Level}");
+            Console.WriteLine($"다음 레벨까지 남은 경험치: {NeedExp - Experience}");
         }
     }
 }
