@@ -90,7 +90,7 @@ namespace TextDungeon
             Level = 1;
             MonsterKills = 0;
             IsEquipped = false;
-            Gold = 50000;
+            Gold = 50;
             Health = 100;
 
             // 직업에 따른 스탯 설정
