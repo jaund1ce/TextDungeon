@@ -1,8 +1,5 @@
 ﻿using System;
-namespace TextDungeon; 
-using static Player;
-
-
+using TextDungeon;
 
 class Program
 {
