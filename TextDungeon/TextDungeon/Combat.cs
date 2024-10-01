@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+
 namespace TextDungeon
 {
-
     public class Combat
     {
         private Player player;
@@ -139,11 +139,13 @@ namespace TextDungeon
                         AddCombatLog(rewardLog);
                         Console.WriteLine(rewardLog);
 
-                        // 아이템 보상
+                        // `ItemDb`에서 무작위로 아이템 선택
                         if (rand.Next(0, 100) < 30)  // 30% 확률로 아이템 지급
                         {
-                            Item rewardItem = new Item("보상 아이템", 0, 5, "전투에서 획득한 아이템입니다.", 1000);
+                            int randomItemIndex = rand.Next(0, Program.ItemDb.Length);  // `ItemDb`에서 무작위로 아이템 선택
+                            Item rewardItem = Program.ItemDb[randomItemIndex];
                             player.AddItem(rewardItem);
+
                             string itemRewardLog = $"{rewardItem.itemName}을(를) 획득했습니다!";
                             AddCombatLog(itemRewardLog);  // 아이템 보상 로그 추가
                             Console.WriteLine(itemRewardLog);
