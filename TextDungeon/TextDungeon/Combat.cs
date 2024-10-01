@@ -125,11 +125,29 @@ namespace TextDungeon
                     AddCombatLog(attackLog);  // 공격 로그 추가
                     Console.WriteLine(attackLog);
 
-                    // 몬스터가 죽었을 경우 로그 추가
+                    // 몬스터가 죽었을 경우 로그 추가 및 보상 지급
                     if (selectedMonster.HP <= 0)
                     {
                         string deathLog = $"{selectedMonster.Name}이(가) 죽었습니다.";
                         AddCombatLog(deathLog);  // 죽음 로그 추가
+                        Console.WriteLine(deathLog);
+
+                        // 보상 지급
+                        int goldReward = rand.Next(50, 101);  // 50~100 골드 지급
+                        player.Gold += goldReward;
+                        string rewardLog = $"{selectedMonster.Name} 처치! {goldReward} 골드를 획득했습니다!";
+                        AddCombatLog(rewardLog);
+                        Console.WriteLine(rewardLog);
+
+                        // 아이템 보상
+                        if (rand.Next(0, 100) < 30)  // 30% 확률로 아이템 지급
+                        {
+                            Item rewardItem = new Item("보상 아이템", 0, 5, "전투에서 획득한 아이템입니다.", 1000);
+                            player.AddItem(rewardItem);
+                            string itemRewardLog = $"{rewardItem.itemName}을(를) 획득했습니다!";
+                            AddCombatLog(itemRewardLog);  // 아이템 보상 로그 추가
+                            Console.WriteLine(itemRewardLog);
+                        }
 
                         // 전투 종료 직전 모든 몬스터가 죽었는지 확인
                         if (monsters.TrueForAll(m => m.IsDead))
@@ -148,6 +166,7 @@ namespace TextDungeon
                 EnemyPhase();
             }
         }
+
 
         private void EnemyPhase()
         {
