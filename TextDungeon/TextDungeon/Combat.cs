@@ -139,15 +139,6 @@ namespace TextDungeon
                         AddCombatLog(rewardLog);
                         Console.WriteLine(rewardLog);
 
-
-                        if (rand.Next(0, 100) < 10)  //10% 확률로 포션 지급
-                        {
-                            string PotionLog = "포션을(를) 획득했습니다";
-                            AddCombatLog(PotionLog);
-                            Console.WriteLine(PotionLog);
-                            player.Potion += 1;
-                        }
-
                         // `ItemDb`에서 무작위로 아이템 선택
                         if (rand.Next(0, 100) < 30)  // 30% 확률로 아이템 지급
                         {
