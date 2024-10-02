@@ -15,7 +15,7 @@ namespace TextDungeon
         public int MaxHealth { get; set; }
         public int Gold { get; set; }  // 골드는 외부에서 증가시키기 위해 set 변경
         public int Experience { get; set; }
-        private int NeedExp = 50;
+        private int NeedExp = 30;
         public int MonsterKills { get; set; }  // 처치한 몬스터 수
         public bool IsEquipped { get; set; }
         public int Potion { get; set; }
@@ -108,7 +108,7 @@ namespace TextDungeon
             Level = 1;
             MonsterKills = 0;
             IsEquipped = false;
-            Gold = 50;  // 초기 골드 설정
+            Gold = 500;  // 초기 골드 설정
             Health = 100;
             MaxHealth = 100;
             Experience = 0;
@@ -177,7 +177,7 @@ namespace TextDungeon
                 Console.WriteLine("********************************");
                 Console.WriteLine("축하합니다! 레벨이 올랐습니다!");
                 Console.WriteLine("********************************");
-                NeedExp += 20; // 레벨이 오를 때마다 필요한 경험치 증가
+                NeedExp += 15; // 레벨이 오를 때마다 필요한 경험치 증가
 
             }
             Console.WriteLine($"현재 레벨 : {Level}");

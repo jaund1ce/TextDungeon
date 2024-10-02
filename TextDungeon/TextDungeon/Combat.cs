@@ -149,7 +149,7 @@ namespace TextDungeon
                         }
 
                         // `ItemDb`에서 무작위로 아이템 선택
-                        if (rand.Next(0, 100) < 30)  // 30% 확률로 아이템 지급
+                        if (rand.Next(0, 100) < 3)  // 3% 확률로 아이템 지급
                         {
                             int randomItemIndex = rand.Next(0, Program.ItemDb.Length);  // `ItemDb`에서 무작위로 아이템 선택
                             Item rewardItem = Program.ItemDb[randomItemIndex];
