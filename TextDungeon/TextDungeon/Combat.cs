@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+
 namespace TextDungeon
 {
-
     public class Combat
     {
         private Player player;
@@ -125,11 +125,31 @@ namespace TextDungeon
                     AddCombatLog(attackLog);  // 공격 로그 추가
                     Console.WriteLine(attackLog);
 
-                    // 몬스터가 죽었을 경우 로그 추가
+                    // 몬스터가 죽었을 경우 로그 추가 및 보상 지급
                     if (selectedMonster.HP <= 0)
                     {
                         string deathLog = $"{selectedMonster.Name}이(가) 죽었습니다.";
                         AddCombatLog(deathLog);  // 죽음 로그 추가
+                        Console.WriteLine(deathLog);
+
+                        // 보상 지급
+                        int goldReward = rand.Next(50, 101);  // 50~100 골드 지급
+                        player.Gold += goldReward;
+                        string rewardLog = $"{selectedMonster.Name} 처치! {goldReward} 골드를 획득했습니다!";
+                        AddCombatLog(rewardLog);
+                        Console.WriteLine(rewardLog);
+
+                        // `ItemDb`에서 무작위로 아이템 선택
+                        if (rand.Next(0, 100) < 30)  // 30% 확률로 아이템 지급
+                        {
+                            int randomItemIndex = rand.Next(0, Program.ItemDb.Length);  // `ItemDb`에서 무작위로 아이템 선택
+                            Item rewardItem = Program.ItemDb[randomItemIndex];
+                            player.AddItem(rewardItem);
+
+                            string itemRewardLog = $"{rewardItem.itemName}을(를) 획득했습니다!";
+                            AddCombatLog(itemRewardLog);  // 아이템 보상 로그 추가
+                            Console.WriteLine(itemRewardLog);
+                        }
 
                         // 전투 종료 직전 모든 몬스터가 죽었는지 확인
                         if (monsters.TrueForAll(m => m.IsDead))
@@ -148,6 +168,7 @@ namespace TextDungeon
                 EnemyPhase();
             }
         }
+
 
         private void EnemyPhase()
         {
@@ -196,6 +217,8 @@ namespace TextDungeon
         private void EndBattle()
         {
             player.MonsterKills += monsters.Count; // 처치한 몬스터 수 증가
+            Console.WriteLine($"+{monsters.Count * 5}경험치를 획득했습니다.");
+            player.GainExperience(monsters.Count * 5); // 경험치 증가 (몬스터 수 * 5)
             Console.WriteLine("전투가 끝났습니다. 계속하려면 아무 키나 누르세요...");
             Console.ReadKey();  // 사용자의 키 입력을 기다림
             returnToStatUI();  // StatUI로 돌아감

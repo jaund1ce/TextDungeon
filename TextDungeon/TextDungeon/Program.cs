@@ -4,9 +4,10 @@ using TextDungeon;
 
 class Program
 {
+
     static Player player;
     static QuestManager questManager;
-    static Item[] ItemDb;
+    public static Item[] ItemDb;
 
     static void Main(string[] args)
     {
@@ -56,7 +57,7 @@ class Program
 
         player = new Player(playerName, playerJob);
     }
-    static void SetData() //상점물건등록
+     static void SetData() //상점물건등록
     {
         ItemDb = new Item[]
         {
