@@ -18,6 +18,7 @@ namespace TextDungeon
         private int NeedExp = 50;
         public int MonsterKills { get; set; }  // 처치한 몬스터 수
         public bool IsEquipped { get; set; }
+        public int Potion { get; set; }
 
         // 인벤토리와 장비 리스트
         private static List<Item> Inventory = new List<Item>();
@@ -107,10 +108,11 @@ namespace TextDungeon
             Level = 1;
             MonsterKills = 0;
             IsEquipped = false;
-            Gold = 50000;  // 초기 골드 설정
+            Gold = 50;  // 초기 골드 설정
             Health = 100;
             MaxHealth = 100;
             Experience = 0;
+            Potion = 3;
 
             // 직업에 따른 스탯 설정
             switch (job)

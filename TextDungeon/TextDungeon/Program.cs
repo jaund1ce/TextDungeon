@@ -57,7 +57,7 @@ class Program
 
         player = new Player(playerName, playerJob);
     }
-     static void SetData() //상점물건등록
+    static void SetData() //상점물건등록
     {
         ItemDb = new Item[]
         {
@@ -66,7 +66,7 @@ class Program
             new Item("스파르타의 갑옷", 1, 15,"스파르타의 전사들이 사용했다는 전설의 갑옷입니다. ",3500),
             new Item("낡은 검", 0, 2,"쉽게 볼 수 있는 낡은 검 입니다. ",600),
             new Item("청동 도끼", 0, 5,"어디선가 사용됐던거 같은 도끼입니다. ",1500),
-            new Item("스파르타의 창", 0, 7,"스파르타의 전사들이 사용했다는 전설의 창입니다. ",2500)
+            new Item("스파르타의 창", 0, 7,"스파르타의 전사들이 사용했다는 전설의 창입니다. ",2500),
         };
     }
     public static void DisplayMainUI()
@@ -132,6 +132,7 @@ class Program
         Console.WriteLine($"방어력: {player.Defense}");
         Console.WriteLine($"체력: {player.Health}");
         Console.WriteLine($"골드: {player.Gold} G");
+        Console.WriteLine($"보유물약: {player.Potion} 개");
         Console.WriteLine($"처치한 몬스터 수: {player.MonsterKills}");
         Console.WriteLine($"장비 장착 여부: {(player.IsEquipped ? "장착함" : "장착 안함")}");
         Console.WriteLine();
@@ -150,12 +151,13 @@ class Program
 
         Console.WriteLine();
         Console.WriteLine("1.장착관리");
+        Console.WriteLine("2.물약 사용");
         Console.WriteLine("0. 나가기");
         Console.WriteLine();
         Console.WriteLine("원하시는 행동을 입력해주세요.");
         Console.Write(">>");
 
-        int result = CheckInput(0, player.InventoryCount);
+        int result = CheckInput(0, 2);
 
         switch (result)
         {
@@ -165,6 +167,10 @@ class Program
 
             case 1:
                 EquipUI();
+                break;
+            case 2:
+                HealUI();
+                InventoryUI();
                 break;
             default:
                 Console.WriteLine("다시 입력해주세요");
@@ -199,74 +205,119 @@ class Program
             default:
 
                 Item targetitem = player.getinventoryItem(result);
-
                 player.EquipItem(targetitem);
-
                 EquipUI();
                 break;
         }
     }
-    static void ShopUI()
+
+    static void HealUI()
     {
         Console.Clear();
-        Console.WriteLine("상점");
-        Console.WriteLine("필요한 아이템을 얻을 수 있는 상점입니다.");
-        Console.WriteLine();
-        Console.WriteLine("[보유 골드]");
-        Console.WriteLine($"{player.Gold} G");
-        Console.WriteLine();
-        Console.WriteLine("[아이템 목록]");
-        for (int i = 0; i < ItemDb.Length; i++)
-        {
-            Item curItem = ItemDb[i];
+        Console.WriteLine("체력을 회복시키시겠습니까?");
+        Console.WriteLine($"현재 물약 개수 {player.Potion} ");
+        Console.WriteLine($"현재체력 : {player.Health}");
+        Console.WriteLine("1.네");
+        Console.WriteLine("2.아니요");
 
-            string displayPrice = (player.HasItem(curItem) ? "구매완료" : $"{curItem.itemPrice} G");
-            Console.WriteLine($"- {i+1} . {curItem.ItemInfoText()}  |  {displayPrice}");
-        }
-        
-        Console.WriteLine();
-        Console.WriteLine();
-        Console.WriteLine("구매하고 싶은 장비의 번호를 입력해주세요");
-        Console.WriteLine("0. 나가기");
-        Console.Write(">>");
-
-        int result = CheckInput(0, ItemDb.Length);
+        int result = CheckInput(1, 2);
 
         switch (result)
         {
-            case 0:
-                DisplayMainUI();
-                break;
-
-            default:
-                int itemidx = result - 1;
-                Item targetItem = ItemDb[itemidx];
-                //이미 구매한 아이템이면
-                if (player.HasItem(targetItem))
+            case 1:
+                if (player.Potion <= 0)
                 {
-                    Console.WriteLine("이미 구매한 아이템입니다.");
-                    Console.WriteLine("Enter 를 눌러주세요.");
+                    player.Potion = 0;
+                    Console.WriteLine();
+                    Console.WriteLine("포션이 없습니다");
                     Console.ReadLine();
                 }
-                else //구매가 가능하면
+                else
                 {
-                    //소지금이 충족될떄
-                    if (player.Gold >= targetItem.itemPrice)
+                    player.Health += 30;
+                    if (player.Health >= 100)
                     {
-                        Console.WriteLine("구매완료");
-                        player.BuyItem(targetItem);
+                        player.Health = 100;
                     }
-                    else
+                    player.Potion -= 1;
+                    Console.Clear();
+                    Console.WriteLine("체력이 회복되었습니다");
+                    Console.WriteLine($"현재체력 : {player.Health}");
+                    HealUI();
+                }
+                break;
+            case 2:
+                Console.WriteLine("뒤로 돌아갑니다.");
+                Console.ReadLine();
+                break;
+            default:
+                Console.WriteLine("잘못된 입력입니다."); 
+                Console.ReadLine();
+                HealUI();
+                break;
+        }
+    } 
+        static void ShopUI()
+        {
+            Console.Clear();
+            Console.WriteLine("상점");
+            Console.WriteLine("필요한 아이템을 얻을 수 있는 상점입니다.");
+            Console.WriteLine();
+            Console.WriteLine("[보유 골드]");
+            Console.WriteLine($"{player.Gold} G");
+            Console.WriteLine();
+            Console.WriteLine("[아이템 목록]");
+            for (int i = 0; i < ItemDb.Length; i++)
+            {
+                Item curItem = ItemDb[i];
+
+                string displayPrice = (player.HasItem(curItem) ? "구매완료" : $"{curItem.itemPrice} G");
+                Console.WriteLine($"- {i+1} . {curItem.ItemInfoText()}  |  {displayPrice}");
+            }
+        
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine("구매하고 싶은 장비의 번호를 입력해주세요");
+            Console.WriteLine("0. 나가기");
+            Console.Write(">>");
+
+            int result = CheckInput(0, ItemDb.Length);
+
+            switch (result)
+            {
+                case 0:
+                    DisplayMainUI();
+                    break;
+
+                default:
+                    int itemidx = result - 1;
+                    Item targetItem = ItemDb[itemidx];
+                    //이미 구매한 아이템이면
+                    if (player.HasItem(targetItem))
                     {
-                        Console.WriteLine("골드가 부족합니다");
+                        Console.WriteLine("이미 구매한 아이템입니다.");
                         Console.WriteLine("Enter 를 눌러주세요.");
                         Console.ReadLine();
                     }
-                }
-                ShopUI();
-                break;
+                    else //구매가 가능하면
+                    {
+                        //소지금이 충족될떄
+                        if (player.Gold >= targetItem.itemPrice)
+                        {
+                            Console.WriteLine("구매완료");
+                            player.BuyItem(targetItem);
+                        }
+                        else
+                        {
+                            Console.WriteLine("골드가 부족합니다");
+                            Console.WriteLine("Enter 를 눌러주세요.");
+                            Console.ReadLine();
+                        }
+                    }
+                    ShopUI();
+                    break;
+            }
         }
-    }
 public static int CheckInput(int min, int max)
     {
         int result;
