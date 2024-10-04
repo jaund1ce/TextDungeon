@@ -66,6 +66,7 @@ namespace TextDungeon
             else
             {
                 EquipList.Add(item);
+                IsEquipped = true;
                 if (item.itemType == 0)
                     Attack += item.itemValue; // 공격 아이템 장착
                 else
@@ -75,7 +76,7 @@ namespace TextDungeon
 
         // 아이템 장착 여부 확인 메서드
         public bool IsEquipItem(Item item)
-        {
+        {  
             return EquipList.Contains(item);
         }
 
