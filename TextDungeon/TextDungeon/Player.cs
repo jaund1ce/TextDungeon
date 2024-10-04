@@ -109,7 +109,7 @@ namespace TextDungeon
             Level = 1;
             MonsterKills = 0;
             IsEquipped = false;
-            Gold = 500;  // 초기 골드 설정
+            Gold = 5000;  // 초기 골드 설정
             Health = 100;
             MaxHealth = 100;
             Experience = 0;

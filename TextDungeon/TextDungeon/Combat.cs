@@ -8,7 +8,7 @@ namespace TextDungeon
         private Player player;
         private List<Monster> monsters;
         private List<string> combatLog;  // 전투 로그 리스트
-        private const int maxLogSize = 5;  // 한 번에 출력할 최대 로그 개수
+        private const int maxLogSize = 9;  // 한 번에 출력할 최대 로그 개수
         private Action returnToStatUI;
 
 
@@ -101,8 +101,8 @@ namespace TextDungeon
             {
                 // 공격력 계산 (회피와 치명타 처리 포함)
                 Random rand = new Random();
-                bool isDodge = rand.Next(0, 100) < 10;  // 10% 확률로 회피
-                bool isCritical = rand.Next(0, 100) < 15;  // 15% 확률로 치명타
+                bool isDodge = rand.Next(0, 100) < 30;  // 30% 확률로 회피
+                bool isCritical = rand.Next(0, 100) < 30;  // 30% 확률로 치명타
 
                 if (isDodge)
                 {
@@ -140,7 +140,7 @@ namespace TextDungeon
                         Console.WriteLine(rewardLog);
 
 
-                        if (rand.Next(0, 100) < 10)  //10% 확률로 포션 지급
+                        if (rand.Next(0, 100) < 50)  //50% 확률로 포션 지급
                         {
                             string PotionLog = "포션을(를) 획득했습니다";
                             AddCombatLog(PotionLog);
@@ -149,7 +149,7 @@ namespace TextDungeon
                         }
 
                         // `ItemDb`에서 무작위로 아이템 선택
-                        if (rand.Next(0, 100) < 3)  // 3% 확률로 아이템 지급
+                        if (rand.Next(0, 100) < 50)  // 50% 확률로 아이템 지급
                         {
                             int randomItemIndex = rand.Next(0, Program.ItemDb.Length);  // `ItemDb`에서 무작위로 아이템 선택
                             Item rewardItem = Program.ItemDb[randomItemIndex];
